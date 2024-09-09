@@ -1,0 +1,32 @@
+name: 'Submit LAVA job via QA-reports'
+description: 'Submit LAVA jobs using QA-reports API'
+inputs:
+  job_definition:
+    description: 'Test job definition to submit'
+    required: true
+  qa_reports_token:
+    description: 'Authentication token for job submission'
+    required: true
+  qa_reports_url:
+    description: 'URL of QA-reports instance'
+    required: true
+  qa_reports_group:
+    description: 'Group name in QA-reports'
+    required: true
+  qa_reports_project:
+    description: 'Project name in QA-reports'
+    required: true
+  qa_reports_environment:
+    description: 'Environment name in QA-reports'
+    required: true
+  qa_reports_build:
+    description: 'Build ID in QA-reports'
+    required: true
+  qa_reports_patch_source:
+    description: 'Patch source name in QA-reports project'
+outputs:
+  job-id:
+    description: 'Stringified version of job ID list'
+runs:
+  using: 'node20'
+  main: 'submit.js'
