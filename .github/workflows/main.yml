@@ -3,11 +3,17 @@ on: [workflow_dispatch, pull_request, push]
 jobs:
   submit_lava_job:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        machine:
+          - qcm6490-idp
+          - qcs6490-rb3gen2-core-kit
+          - sa8775p-ride-sx
     name: Create QA-reports build and test jobs
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: show
+      - name: build
         run: "ls -la"
       - name: submit
         uses: mwasilew/qa-reports-action@HEAD
@@ -15,7 +21,7 @@ jobs:
           qa_reports_token: ${{ secrets.TOKEN }}
           qa_reports_url: "qa-reports.foundries.io"
           qa_reports_group: "qcom"
-          qa_reports_project: "test-workflow"
+          qa_reports_project: "${{ matrix.machine }}"
           qa_reports_environment: "qcm6490"
           qa_reports_build: "${{ github.sha }}"
           qa_reports_patch_source: "mwasilew-test"
