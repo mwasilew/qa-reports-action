@@ -23,12 +23,13 @@ try {
 const request = require('request');
 
 function callback(error, response, body) {
+  console.log(response)
+  console.log(body)
   if (error) {
       console.log(error)
       core.setFailure(error)
   }
   if (response.statusCode != 201) {
-      console.log(body)
       core.setFailure(response.statusCode)
   }
 }
