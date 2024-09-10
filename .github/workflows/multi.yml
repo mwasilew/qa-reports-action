@@ -14,7 +14,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: build
-        run: "ls -la"
+        run: mv lava.yaml "${{ matrix.machine }}.yaml"
       - name: Store lava job
         uses: actions/upload-artifact@v4
         with:
