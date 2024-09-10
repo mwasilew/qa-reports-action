@@ -17,23 +17,26 @@ jobs:
       - name: Store lava job
         uses: actions/upload-artifact@v4
         with:
-          name: lava-job
+          name: "lava-job-${{ inputs.machine }}"
           path: lava.yaml
 
   test:
     runs-on: ubuntu-latest
+    name: Submit LAVA jobs
     steps:
       - name: Download a single artifact
         uses: actions/download-artifact@v4
         with:
-          name: lava-job
+          name: "lava-job-${{ inputs.machine }}"
+      - name: list
+        run: "ls -la"
       - name: submit
         uses: mwasilew/qa-reports-action@HEAD
         with:
           qa_reports_token: ${{ secrets.TOKEN }}
           qa_reports_url: "qa-reports.foundries.io"
           qa_reports_group: "qcom"
-          qa_reports_project: "test-workflow" 
+          qa_reports_project: "test-workflow"
           qa_reports_environment: "${{ inputs.machine }}"
           qa_reports_build: "${{ github.sha }}"
           qa_reports_patch_source: "mwasilew-test"
