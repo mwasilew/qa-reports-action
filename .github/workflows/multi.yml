@@ -1,0 +1,53 @@
+on: [workflow_dispatch, pull_request, push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        machine:
+          - qcm6490-idp
+          - qcs6490-rb3gen2-core-kit
+          - sa8775p-ride-sx
+    runs-on: ubuntu-latest
+    name: Create QA-reports build and test jobs
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build
+        run: "ls -la"
+      - name: Store lava job
+        uses: actions/upload-artifact@v4
+        with:
+          name: "lava-job-${{ matrix.machine }}"
+          path: "${{ matrix.machine }}.yaml"
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        machine:
+          - qcm6490-idp
+          - qcs6490-rb3gen2-core-kit
+          - sa8775p-ride-sx
+    needs: build
+    name: Submit LAVA jobs
+    steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: "lava-job-${{ matrix.machine }}"
+      - name: list
+        run: "ls -la"
+      - name: submit
+        uses: mwasilew/qa-reports-action@HEAD
+        with:
+          qa_reports_token: ${{ secrets.TOKEN }}
+          qa_reports_url: "qa-reports.foundries.io"
+          qa_reports_group: "qcom"
+          qa_reports_project: "test-workflow"
+          qa_reports_environment: "${{ matrix.machine }}"
+          qa_reports_build: "${{ github.sha }}"
+          qa_reports_patch_source: "mwasilew-test"
+          qa_reports_lava_backend: "lava.infra.foundries.io"
+          job_definition: "${{ matrix.machine }}.yaml"
+
