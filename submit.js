@@ -32,6 +32,8 @@ function callback(error, response, body) {
   }
 }
 
+console.log(github.context)
+
 const build_path = qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build
 
 if ( qa_reports_patch_source ) {
