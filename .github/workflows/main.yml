@@ -3,7 +3,7 @@ on: [workflow_dispatch, pull_request, push]
 jobs:
   submit_lava_job:
     runs-on: ubuntu-latest
-    name: submit lava job
+    name: Create QA-reports build and test jobs
     steps:
       - name: checkout
         uses: actions/checkout@v4
