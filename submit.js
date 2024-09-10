@@ -68,6 +68,8 @@ var postData = JSON.stringify({
   'backend' : qa_reports_lava_backend
 });
 
+console.log('postData': postData);
+
 var options = {
   hostname: qa_reports_url,
   port: 443,
