@@ -24,6 +24,9 @@ inputs:
     required: true
   qa_reports_patch_source:
     description: 'Patch source name in QA-reports project'
+  qa_reports_lava_backend:
+    description: 'LAVA backend name in QA-reports'
+    required: true
 outputs:
   job-id:
     description: 'Stringified version of job ID list'
