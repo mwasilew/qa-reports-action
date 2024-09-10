@@ -23,41 +23,44 @@ try {
 const https = require('https');
 
 if ( github.event_name == 'pull_request' && qa_reports_patch_source ) {
-	// create new build with patch source first
+    // create new build with patch source first
     var buildData = JSON.stringify({
-		  'patch_id': patch_id,
-		  'patch_source': qa_reports_patch_source
+          'patch_id': patch_id,
+          'patch_source': qa_reports_patch_source
     });
 
-	// patch-id = owner/repo/ref
-	const patch_id = github.repository + '/' + github.sha
-	var options = {
-	  hostname: qa_reports_url,
-	  port: 443,
-	  path: '/api/createbuild/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build,
-	  method: 'POST',
-	  headers: {
-		   'Content-Type': 'application/json',
-		   'Content-Length': buildData.length,
-		   'Auth-Token': qa_reports_token
-		 }
-	};
-	var req1 = https.request(options, (res) => {
-	  console.log('statusCode:', res.statusCode);
-	  console.log('headers:', res.headers);
+    // patch-id = owner/repo/ref
+    const patch_id = github.repository + '/' + github.sha
+    var options = {
+      hostname: qa_reports_url,
+      port: 443,
+      path: '/api/createbuild/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build,
+      method: 'POST',
+      headers: {
+           'Content-Type': 'application/json',
+           'Content-Length': buildData.length,
+           'Auth-Token': qa_reports_token
+         }
+    };
+    var req1 = https.request(options, (res) => {
+      console.log('statusCode:', res.statusCode);
+      console.log('headers:', res.headers);
 
-	  res.on('data', (d) => {
-		process.stdout.write(d);
-	  });
-	});
+      if (res.statusCode != 200) {
+          core.setFailed(res.statusCode)
+      }
+      res.on('data', (d) => {
+        process.stdout.write(d);
+      });
+    });
 
-	req1.on('error', (e) => {
-	  console.error(e);
-	  core.setFailed(e.message);
-	});
+    req1.on('error', (e) => {
+      console.error(e);
+      core.setFailed(e.message);
+    });
 
-	req1.write(buildData);
-	req1.end();
+    req1.write(buildData);
+    req1.end();
 }
 
 var postData = JSON.stringify({
@@ -80,6 +83,9 @@ var options = {
 var req2 = https.request(options, (res) => {
   console.log('statusCode:', res.statusCode);
   console.log('headers:', res.headers);
+  if (res.statusCode != 200) {
+      core.setFailed(res.statusCode)
+  }
 
   res.on('data', (d) => {
     process.stdout.write(d);
