@@ -65,7 +65,6 @@ if ( github.event_name == 'pull_request' && qa_reports_patch_source ) {
 
 var postData = JSON.stringify({
   'backend' : qa_reports_lava_backend,
-  'definition' : file
 });
 
 console.log('postData:', postData);
