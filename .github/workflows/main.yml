@@ -1,0 +1,23 @@
+on: [workflow_dispatch, pull_request, push]
+
+jobs:
+  submit_lava_job:
+    runs-on: ubuntu-latest
+    name: submit lava job
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: show
+        run: "ls -la"
+      - name: submit
+        uses: mwasilew/qa-reports-action@v1
+        with:
+          qa_reports_token: ${{ secrets.TOKEN }}
+          qa_reports_url: "qa-reports.foundries.io"
+          qa_reports_group: "qcom"
+          qa_reports_project: "test-workflow"
+          qa_reports_environment: "qcm6490"
+          qa_reports_build: "${{ github.sha }}"
+          qa_reports_patch_source: "fio-github"
+          job_definition: "lava.yaml"
+
