@@ -23,8 +23,6 @@ try {
 const request = require('request');
 
 function callback(error, response, body) {
-  console.log(response)
-  console.log(body)
   if (error) {
       console.log(error)
       core.setFailure(error)
@@ -34,13 +32,16 @@ function callback(error, response, body) {
   }
 }
 
+const build_path = qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build
+
 if ( qa_reports_patch_source ) {
     // create new build with patch source first
 
     // patch-id = owner/repo/ref
     const patch_id = github.repository + '/' + github.sha
+    console.log("Using patch_id: ", patch_id)
     var options = {
-      url: 'https://' + qa_reports_url + '/api/createbuild/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build,
+      url: 'https://' + qa_reports_url + '/api/createbuild/' + build_path,
       method: 'POST',
       headers: {
            'Auth-Token': qa_reports_token
@@ -54,7 +55,7 @@ if ( qa_reports_patch_source ) {
 }
 
 var options = {
-  url: 'https://' + qa_reports_url + '/' + '/api/submitjob/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build + '/' + qa_reports_environment,
+  url: 'https://' + qa_reports_url + '/' + '/api/submitjob/' + build_path + '/' + qa_reports_environment,
   method: 'POST',
   headers: {
        'Auth-Token': qa_reports_token
@@ -66,3 +67,5 @@ var options = {
 };
 
 request(options, callback)
+
+console.log("Created qa-reports build: ", 'https://' + qa_reports_url + '/' + build_path)
