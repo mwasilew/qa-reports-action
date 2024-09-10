@@ -40,7 +40,7 @@ if ( qa_reports_patch_source ) {
     // create new build with patch source first
 
     // patch-id = owner/repo/ref
-    const patch_id = github.context.repository.full_name + '/' + github.context.sha
+    const patch_id = github.context.payload.repository.full_name + '/' + github.context.sha
     console.log("Using patch_id: ", patch_id)
     var options = {
       url: 'https://' + qa_reports_url + '/api/createbuild/' + build_path,
