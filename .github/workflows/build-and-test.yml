@@ -14,9 +14,19 @@ jobs:
         uses: actions/checkout@v4
       - name: build
         run: "ls -la"
+      - name: Store lava job
+        uses: actions/upload-artifact@v4
+        with:
+          name: lava-job
+          path: lava.yaml
+
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lava-job
       - name: submit
         uses: mwasilew/qa-reports-action@HEAD
         with:
