@@ -21,8 +21,8 @@ jobs:
           qa_reports_token: ${{ secrets.TOKEN }}
           qa_reports_url: "qa-reports.foundries.io"
           qa_reports_group: "qcom"
-          qa_reports_project: "${{ matrix.machine }}"
-          qa_reports_environment: "qcm6490"
+          qa_reports_project: "test-workflow" 
+          qa_reports_environment: "${{ matrix.machine }}"
           qa_reports_build: "${{ github.sha }}"
           qa_reports_patch_source: "mwasilew-test"
           qa_reports_lava_backend: "lava.infra.foundries.io"
