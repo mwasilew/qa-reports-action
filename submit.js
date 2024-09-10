@@ -25,10 +25,10 @@ const request = require('request');
 function callback(error, response, body) {
   if (error) {
       console.log(error)
-      core.setFailure(error)
+      core.setFailed(error)
   }
   if (response.statusCode != 201) {
-      core.setFailure(response.statusCode)
+      core.setFailed(response.statusCode)
   }
 }
 
