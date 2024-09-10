@@ -20,84 +20,48 @@ try {
   core.setFailed(err.message);
 }
 // submit to lava
-const https = require('https');
+const request = require('request');
 
-if ( github.event_name == 'pull_request' && qa_reports_patch_source ) {
+function callback(error, response, body) {
+  if (error) {
+      console.log(error)
+      core.setFailure(error)
+  }
+  if (response.statusCode != 201) {
+      console.log(body)
+      core.setFailure(response.statusCode)
+  }
+}
+
+if ( qa_reports_patch_source ) {
     // create new build with patch source first
-    var buildData = JSON.stringify({
-          'patch_id': patch_id,
-          'patch_source': qa_reports_patch_source
-    });
 
     // patch-id = owner/repo/ref
     const patch_id = github.repository + '/' + github.sha
     var options = {
-      hostname: qa_reports_url,
-      port: 443,
-      path: '/api/createbuild/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build,
+      url: 'https://' + qa_reports_url + '/api/createbuild/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build,
       method: 'POST',
       headers: {
-           'Content-Type': 'application/json',
-           'Content-Length': buildData.length,
            'Auth-Token': qa_reports_token
-         }
+         },
+      form: {
+          'patch_id': patch_id,
+          'patch_source': qa_reports_patch_source
+        }
     };
-    var req1 = https.request(options, (res) => {
-      console.log('statusCode:', res.statusCode);
-      console.log('headers:', res.headers);
-
-      if (res.statusCode != 200) {
-          core.setFailed(res.statusCode)
-      }
-      res.on('data', (d) => {
-        process.stdout.write(d);
-      });
-    });
-
-    req1.on('error', (e) => {
-      console.error(e);
-      core.setFailed(e.message);
-    });
-
-    req1.write(buildData);
-    req1.end();
+    request(options, callback)
 }
 
-var postData = JSON.stringify({
-  'backend' : qa_reports_lava_backend,
-});
-
-console.log('postData:', postData);
-
 var options = {
-  hostname: qa_reports_url,
-  port: 443,
-  path: '/api/submitjob/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build + '/' + qa_reports_environment,
+  url: 'https://' + qa_reports_url + '/' + '/api/submitjob/' + qa_reports_group + '/' + qa_reports_project + '/' + qa_reports_build + '/' + qa_reports_environment,
   method: 'POST',
   headers: {
-       'Content-Type': 'application/json',
-       'Content-Length': postData.length,
        'Auth-Token': qa_reports_token
      },
+  form: {
+      'backend' : qa_reports_lava_backend,
+      'definition' : file
+     }
 };
 
-var req2 = https.request(options, (res) => {
-  console.log('statusCode:', res.statusCode);
-  console.log('headers:', res.headers);
-  if (res.statusCode != 200) {
-      core.setFailed(res.statusCode)
-  }
-
-  res.on('data', (d) => {
-    process.stdout.write(d);
-  });
-});
-
-req2.on('error', (e) => {
-  console.error(e);
-  core.setFailed(e.message);
-});
-
-req2.write(postData);
-req2.end();
-
+request(options, callback)
