@@ -18,7 +18,7 @@ jobs:
           qa_reports_project: "test-workflow"
           qa_reports_environment: "qcm6490"
           qa_reports_build: "${{ github.sha }}"
-          qa_reports_patch_source: "fio-github"
+          qa_reports_patch_source: "mwasilew-test"
           qa_reports_lava_backend: "lava.infra.foundries.io"
           job_definition: "lava.yaml"
 
