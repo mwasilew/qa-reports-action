@@ -10,7 +10,7 @@ jobs:
       - name: show
         run: "ls -la"
       - name: submit
-        uses: mwasilew/qa-reports-action@v2
+        uses: mwasilew/qa-reports-action@v3
         with:
           qa_reports_token: ${{ secrets.TOKEN }}
           qa_reports_url: "qa-reports.foundries.io"
@@ -19,5 +19,6 @@ jobs:
           qa_reports_environment: "qcm6490"
           qa_reports_build: "${{ github.sha }}"
           qa_reports_patch_source: "fio-github"
+          qa_reports_lava_backend: "lava.infra.foundries.io"
           job_definition: "lava.yaml"
 
