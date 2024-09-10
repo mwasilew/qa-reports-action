@@ -11,8 +11,8 @@ jobs:
           - qcm6490-idp
           - qcs6490-rb3gen2-core-kit
           - sa8775p-ride-sx
-    uses: ./.github/workflows/build-and-test.yml # calls the one above ^
+    uses: ./.github/workflows/build-and-test.yml
     with:
-      version: ${{ matrix.machine }}
+      machine: ${{ matrix.machine }}
     secrets: inherit
 
