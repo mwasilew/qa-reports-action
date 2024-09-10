@@ -10,7 +10,7 @@ jobs:
       - name: show
         run: "ls -la"
       - name: submit
-        uses: mwasilew/qa-reports-action@v1
+        uses: mwasilew/qa-reports-action@v2
         with:
           qa_reports_token: ${{ secrets.TOKEN }}
           qa_reports_url: "qa-reports.foundries.io"
