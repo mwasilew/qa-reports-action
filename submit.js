@@ -11,7 +11,7 @@ const qa_reports_build = core.getInput('qa_reports_build', { required: true })
 const qa_reports_patch_source = core.getInput('qa_reports_patch_source')
 // read from file
 const fs = require ('fs');
-const file;
+var file;
 try {
   file = fs.readFileSync(job_definition_path, 'utf-8');
 } catch (err) {
