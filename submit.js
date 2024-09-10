@@ -75,11 +75,6 @@ var options = {
        'Content-Length': postData.length,
        'Auth-Token': qa_reports_token
      },
-  data: {
-	  'definition': ,
-	  'backend': ''
-     }
-
 };
 
 var req2 = https.request(options, (res) => {
